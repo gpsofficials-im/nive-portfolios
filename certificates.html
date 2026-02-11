@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates | Gokul Prasanth S</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient);
+            border-radius: 5px;
+        }
+
+        /* Header */
+        header {
+            background: var(--card-bg);
+            padding: 2rem 5%;
+            text-align: center;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 5%;
+            top: 2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--primary-color);
+            transform: translateX(-5px);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 3rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Certificates Grid */
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Certificate Card */
+        .cert-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+        }
+
+        .cert-card.reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .cert-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary-color);
+            box-shadow: 0 25px 50px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Shine Effect */
+        .cert-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .cert-card:hover::before {
+            left: 100%;
+        }
+
+        /* Certificate Header */
+        .cert-header {
+            background: var(--gradient);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cert-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1rem;
+            animation: iconFloat 3s ease-in-out infinite;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .cert-card:hover .cert-icon {
+            animation: iconSpin 0.6s ease;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .cert-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Certificate Body */
+        .cert-body {
+            padding: 1.5rem;
+        }
+
+        .cert-body h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .cert-issuer {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .cert-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .cert-id {
+            background: rgba(99, 102, 241, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .cert-id i {
+            color: var(--accent-color);
+            margin-right: 0.3rem;
+        }
+
+        .cert-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .cert-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-tag {
+            background: rgba(99, 102, 241, 0.15);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background: var(--gradient);
+            transform: scale(1.05);
+        }
+
+        /* Certificate Button */
+        .cert-btn {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cert-btn:hover::before {
+            left: 100%;
+        }
+
+        .cert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .cert-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Stagger Animation Delays */
+        .certificates-grid .cert-card:nth-child(1) { transition-delay: 0.1s; }
+        .certificates-grid .cert-card:nth-child(2) { transition-delay: 0.2s; }
+        .certificates-grid .cert-card:nth-child(3) { transition-delay: 0.3s; }
+        .certificates-grid .cert-card:nth-child(4) { transition-delay: 0.4s; }
+        .certificates-grid .cert-card:nth-child(5) { transition-delay: 0.5s; }
+        .certificates-grid .cert-card:nth-child(6) { transition-delay: 0.6s; }
+
+        /* Footer */
+        footer {
+            background: var(--dark-bg);
+            padding: 2rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+            margin-top: 3rem;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        footer .heart {
+            color: var(--accent-color);
+            animation: heartbeat 1.5s ease infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .back-btn {
+                position: static;
+                justify-content: center;
+                margin-bottom: 1rem;
+            }
+
+            .certificates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cert-header {
+                padding: 1.5rem;
+            }
+
+            .cert-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="Gokul.HTML" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Portfolio
+        </a>
+        <h1><i class="fas fa-certificate"></i> My Certificates</h1>
+        <p>Professional certifications and achievements</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="certificates-grid">
+            <!-- Certificate 1 -->
+            <div class="cert-card reveal">
+                <div class="cert-header">
+                    <div class="cert-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <span class="cert-badge">Internship</span>
+                </div>
+                <div class="cert-body">
+                    <h3>Full Stack Development Internship</h3>
+                    <p class="cert-issuer"><i class="fas fa-building"></i> Edu Tantr, Bengaluru</p>
+                    <p class="cert-date"><i class="fas fa-calendar-alt"></i> May 2025 - June 2025</p>
+                    <div class="cert-id">
+                        <i class="fas fa-id-card"></i> Certificate of Completion
+                    </div>
+                    <p class="cert-description">
+                        Completed intensive internship program covering full stack web development including frontend design, backend API development, and database management.
+                    </p>
+                    <div class="cert-skills">
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Express.js</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">MongoDB</span>
+                    </div>
+                    <a href="#" class="cert-btn"><i class="fas fa-eye"></i> View Certificate</a>
+                </div>
+            </div>
+
+            <!-- Certificate 2 -->
+            <div class="cert-card reveal">
+                <div class="cert-header">
+                    <div class="cert-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <span class="cert-badge">Oracle</span>
+                </div>
+                <div class="cert-body">
+                    <h3>Oracle Certified Foundation Associate</h3>
+                    <p class="cert-issuer"><i class="fas fa-university"></i> Oracle University</p>
+                    <p class="cert-date"><i class="fas fa-calendar-alt"></i> August 2025</p>
+                    <div class="cert-id">
+                        <i class="fas fa-id-card"></i> Oracle Certification
+                    </div>
+                    <p class="cert-description">
+                        Earned Oracle certification demonstrating foundational knowledge in Oracle technologies and database concepts.
+                    </p>
+                    <div class="cert-skills">
+                        <span class="skill-tag">Oracle DB</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">Database Design</span>
+                    </div>
+                    <a href="#" class="cert-btn">
+                        <i class="fas fa-eye"></i> View Certificate
+                    </a>
+                </div>
+            </div>
+
+            <!-- Certificate 3 -->
+            <div class="cert-card reveal">
+                <div class="cert-header">
+                    <div class="cert-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <span class="cert-badge">Programming</span>
+                </div>
+                <div class="cert-body">
+                    <h3>Basics of Python</h3>
+                    <p class="cert-issuer"><i class="fas fa-university"></i> Infosys</p>
+                    <p class="cert-date"><i class="fas fa-calendar-alt"></i> March 2025</p>
+                    <div class="cert-id">
+                        <i class="fas fa-id-card"></i> Infosys Certification
+                    </div>
+                    <p class="cert-description">
+                        Completed comprehensive Python programming fundamentals course covering syntax, data types, control structures, and basic programming concepts.
+                    </p>
+                    <div class="cert-skills">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Programming Basics</span>
+                        <span class="skill-tag">Data Structures</span>
+                    </div>
+                    <a href="#" class="cert-btn">
+                        <i class="fas fa-eye"></i> View Certificate
+                    </a>
+                </div>
+            </div>
+
+            <!-- Certificate 4 -->
+            <div class="cert-card reveal">
+                <div class="cert-header">
+                    <div class="cert-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <span class="cert-badge">Programming</span>
+                </div>
+                <div class="cert-body">
+                    <h3>Object Oriented Programming using Python</h3>
+                    <p class="cert-issuer"><i class="fas fa-university"></i> Infosys</p>
+                    <p class="cert-date"><i class="fas fa-calendar-alt"></i> March 2025</p>
+                    <div class="cert-id">
+                        <i class="fas fa-id-card"></i> Infosys Certification
+                    </div>
+                    <p class="cert-description">
+                        Advanced Python certification focusing on OOP principles including classes, objects, inheritance, polymorphism, and encapsulation.
+                    </p>
+                    <div class="cert-skills">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">OOP</span>
+                        <span class="skill-tag">Classes & Objects</span>
+                        <span class="skill-tag">Inheritance</span>
+                    </div>
+                    <a href="#" class="cert-btn">
+                        <i class="fas fa-eye"></i> View Certificate
+                    </a>
+                </div>
+            </div>
+
+            <!-- Certificate 5 -->
+            <div class="cert-card reveal">
+                <div class="cert-header">
+                    <div class="cert-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <span class="cert-badge">AI/ML</span>
+                </div>
+                <div class="cert-body">
+                    <h3>Explore Machine Learning using Python</h3>
+                    <p class="cert-issuer"><i class="fas fa-university"></i> Infosys</p>
+                    <p class="cert-date"><i class="fas fa-calendar-alt"></i> March 2025</p>
+                    <div class="cert-id">
+                        <i class="fas fa-id-card"></i> Infosys Certification
+                    </div>
+                    <p class="cert-description">
+                        Introduction to Machine Learning concepts using Python, covering supervised learning, data preprocessing, and basic ML algorithms.
+                    </p>
+                    <div class="cert-skills">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Data Analysis</span>
+                        <span class="skill-tag">Scikit-learn</span>
+                    </div>
+                    <a href 1="CSC DCP.jpg" class="cert-btn">
+                    <a href 2="CSC DMO.jpg" class="cert-btn">
+                        <i class="fas fa-eye"></i> View Certificate         
+                    </a>
+                </div>
+            </div>
+
+            <!-- Certificate 6 -->
+            <div class="cert-card reveal">
+                <div class="cert-header">
+                    <div class="cert-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <span class="cert-badge">Database</span>
+                </div>
+                <div class="cert-body">
+                    <h3>Introduction to MongoDB for Students</h3>
+                    <p class="cert-issuer"><i class="fas fa-university"></i> ICT Academy</p>
+                    <p class="cert-date"><i class="fas fa-calendar-alt"></i> August 2024</p>
+                    <div class="cert-id">
+                        <i class="fas fa-id-card"></i> ICT Academy Certification
+                    </div>
+                    <p class="cert-description">
+                        Foundational course on MongoDB NoSQL database covering document-oriented data model, CRUD operations, and basic database administration.
+                    </p>
+                    <div class="cert-skills">
+                        <span class="skill-tag">MongoDB</span>
+                        <span class="skill-tag">NoSQL</span>
+                        <span class="skill-tag">Database</span>
+                        <span class="skill-tag">CRUD Operations</span>
+                    </div>
+                    <a href="DB 1.pdf,DB 2.pdf,DB 3.pdf,DB 4.pdf,DB 5.pdf,DB 6.pdf,DB 7.pdf,DB 8.pdf,DB 9.pdf,DB 10.pdf,DB 11.pdf,DB 12.pdf" class="cert-btn">
+                        <i class="fas fa-eye"></i> View Certificate
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Gokul Prasanth S. All rights reserved.</p>
+        <p>Built with <span class="heart">❤️</span> by Gokul Prasanth S</p>
+    </footer>
+
+    <script>
+        // Scroll Reveal Animation
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+    </script>
+</body>
+</html>
